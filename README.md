@@ -265,7 +265,7 @@ scalable interface between your HTML and CSS.
 
 ### Modules
 Modules should have unique ID's. They should never style outside scope, e.g. 
-#module or .widget.
+\#module or .widget.
 
 <a name="example"></a>
 ## 6. Practical example
