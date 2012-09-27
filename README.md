@@ -1,4 +1,4 @@
-# Principles of writing consistent, idiomatic CSS
+# Principles of writing consistent, idiomatic CSS at QlikTech
 
 The following document outlines a reasonable style guide for CSS development.
 It is not meant to be prescriptive and I do not wish to impose my style
@@ -7,22 +7,6 @@ encourage the use of existing, common, sensible patterns.
 
 This is a living document and new ideas are always welcome. Please
 contribute.
-
-
-## Translations
-
-* [Deutsch](https://github.com/necolas/idiomatic-css/tree/master/translations/de-DE)
-* [Français](https://github.com/necolas/idiomatic-css/tree/master/translations/fr-FR)
-* [Italiano](https://github.com/necolas/idiomatic-css/tree/master/translations/it-IT)
-* [日本語](https://github.com/necolas/idiomatic-css/tree/master/translations/ja-JP)
-* [한국어](https://github.com/necolas/idiomatic-css/tree/master/translations/ko-KR)
-* [Nederlands](https://github.com/necolas/idiomatic-css/tree/master/translations/nl-NL)
-* [Polski](https://github.com/necolas/idiomatic-css/tree/master/translations/pl-PL)
-* [Português (Brasil)](https://github.com/necolas/idiomatic-css/tree/master/translations/pt-BR)
-* [Русский](https://github.com/necolas/idiomatic-css/tree/master/translations/ru-RU)
-* [Srpski](https://github.com/necolas/idiomatic-css/tree/master/translations/sr-SR)
-* [Türkçe](https://github.com/necolas/idiomatic-css/tree/master/translations/tr-TR)
-* [简体中文](https://github.com/necolas/idiomatic-css/tree/master/translations/zh-CN)
 
 
 ## Table of contents
@@ -35,6 +19,9 @@ contribute.
 6. [Practical example](#example)
 7. [Organization](#organization)
 8. [Build and deployment](#build-and-deployment)
+9. [Reusing someone elses code](#reusing)
+10. [Reserved words](#reserved-words)
+11. [Code review](#code-review)
 
 [Acknowledgements](#acknowledgements)
 
@@ -62,10 +49,8 @@ be consistent in your use of whitespace. Use whitespace to improve
 readability.
 
 * _Never_ mix spaces and tabs for indentation.
-* Choose between soft indents (spaces) or real tabs. Stick to your choice
-  without fail. (Preference: spaces)
-* If using spaces, choose the number of characters used per indentation level.
-  (Preference: 4 spaces)
+* Use real tabs.
+* Number of characters used per indentation level should be 4 spaces.
 
 Tip: configure your editor to "show invisibles". This will allow you to
 eliminate end of line whitespace, eliminate unintended blank line whitespace,
@@ -90,7 +75,6 @@ Comment style should be simple and consistent within a single code base.
 * Avoid end of line comments.
 * Keep line-length to a sensible maximum, e.g., 80 columns.
 * Make liberal use of comments to break CSS code into discrete sections.
-* Use "sentence case" comments and consistent text indentation.
 
 Tip: configure your editor to provide you with shortcuts to output agreed-upon
 comment patterns.
@@ -102,27 +86,9 @@ comment patterns.
    Section comment block
    ========================================================================== */
 
-/* Sub-section comment block
-   ========================================================================== */
-
 /**
- * Short description using Doxygen-style comment format
- *
- * Long description first sentence starts here and continues on this line for a
- * while finally concluding here at the end of this paragraph.
- *
- * The long description is ideal for more detailed explanations and
- * documentation. It can include example HTML, URLs, or any other information
- * that is deemed necessary or useful.
- *
- * @tag This is a tag named 'tag'
- *
- * @todo This is a todo statement that describes an atomic task to be completed
- *   at a later date. It wraps after 80 characters and following lines are
- *   indented by 2 spaces.
+ * Short description 
  */
-
-/* Basic comment */
 ```
 
 
@@ -134,19 +100,16 @@ comment; minimizes the chance of accidentally introducing errors; and results
 in useful diffs and blames.
 
 * Use one discrete selector per line in multi-selector rulesets.
-* Include a single space before the opening brace of a ruleset.
 * Include one declaration per line in a declaration block.
 * Use one level of indentation for each declaration.
 * Include single space after the colon of a declaration.
 * Use lowercase and shorthand hex values, e.g., `#aaa`.
-* Use single or double quotes consistently. Preference is for double quotes,
-  e.g., `content: ""`.
+* Use single or double quotes consistently.
 * Quote attribute values in selectors, e.g., `input[type="checkbox"]`.
 * _Where allowed_, avoid specifying units for zero-values, e.g., `margin: 0`.
 * Include a space after each comma in comma-separated property or function
   values.
-* Include a semi-colon at the end of the last declaration in a declaration
-  block.
+* Always use a semi-colon at the end of a declaration.
 * Place the closing brace of a ruleset in the same column as the first
   character of the ruleset.
 * Separate each ruleset by a blank line.
@@ -166,11 +129,10 @@ in useful diffs and blames.
 }
 ```
 
-#### Declaration order
+#### Declaration order (_Optional_)
 
-Declarations should be ordered in accordance with a single principle. My
-preference is for structurally important properties (e.g. positioning and
-box-model) to be declared prior to all others.
+Preferably structurally important properties (e.g. positioning and box-model)
+are to be declared prior to all others.
 
 ```css
 .selector {
@@ -234,7 +196,7 @@ be used; one example is shown below.
 }
 ```
 
-### Preprocessors: additional format considerations
+### Preprocessors: additional format considerations (Not yet appliccable)
 
 Different CSS preprocessors have different features, functionality, and syntax.
 Your conventions should be extended to accommodate the particularities of any
@@ -301,6 +263,9 @@ scalable interface between your HTML and CSS.
 }
 ```
 
+### Modules
+Modules should have unique ID's. They should never style outside scope, e.g. 
+#module or .widget.
 
 <a name="example"></a>
 ## 6. Practical example
@@ -383,6 +348,8 @@ large code bases.
   distinct components.
 * If using a preprocessor, abstract common code into variables for color,
   typography, etc.
+* Put CSS code belonging to a widget or a module in its own file. Name it as
+  the widgets .js-file.
 
 
 <a name="build-and-deployment"></a>
@@ -392,6 +359,39 @@ Projects should always attempt to include some generic means by which source
 can be linted, tested, compressed, and versioned in preparation for production
 use. For this task, [grunt](https://github.com/cowboy/grunt) by Ben Alman is an
 excellent tool.
+
+
+<a name="reusing"></a>
+## 9. Reusing someone elses code
+
+If you want to reuse a widget/module someone else has created. Make sure to
+talk to that person and decide what actions need to be taken in order for you
+to not break each other's styling.
+
+
+<a name="reserved-words"></a>
+## 10. Reserved words
+
+Below is a list of all common generic words that are reserved. They are not to
+be styled!
+
+* cancel
+* edit
+* selected
+* right
+* left
+* top
+* bottom
+* excluded
+* alternative
+* clear
+
+
+<a name="code-review"></a>
+## 11. Code review
+
+Just as you would code review any JavaScript code before delivering it, it is
+also a good custom to do so with your CSS code.
 
 
 <a name="acknowledgements"></a>
